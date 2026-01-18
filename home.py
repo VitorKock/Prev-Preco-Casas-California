@@ -26,27 +26,34 @@ df = carregar_dados_limpos()
 gdf_geo = carregar_dados_geo()
 modelo = carregar_modelo()
 
-longitude = st.number_input("Longitude", value=-122.33)
-latitude = st.number_input("Latitude", value=37.88)
 
-housing_median_age = st.number_input("Idade do Imóvel", value=10)
+condados = list(gdf_geo['name'].sort_values())
 
-total_rooms = st.number_input("Número de cômodos", value=800)
-total_bedrooms = st.number_input("Número de quartos", value=100)
-population = st.number_input("População", value=300)
-households = st.number_input("Domicílios", value=100)
+selecionar_condado = st.selectbox("Condado", condados)
 
-median_income = st.slider("Renda média (múltiplos de $10 mil)", 0.5, 15.0, 4.5, 0.5)
+longitude = gdf_geo.query('name == @selecionar_condado')['longitude'].values
+latitude = gdf_geo.query('name == @selecionar_condado')['latitude'].values
 
-ocean_proximity = st.selectbox("Proximidade do oceano", df['ocean_proximity'].unique())
+housing_median_age = st.number_input("Idade do Imóvel", value=10, min_value=1, max_value=50)
 
-median_income_cat = st.slider("Categoria de renda", 1, 5, 3, 1)
+total_rooms = gdf_geo.query('name == @selecionar_condado')['total_rooms'].values
+total_bedrooms = gdf_geo.query('name == @selecionar_condado')['total_bedrooms'].values
+population = gdf_geo.query('name == @selecionar_condado')['population'].values
+households = gdf_geo.query('name == @selecionar_condado')['households'].values
 
-rooms_per_household = st.number_input("Cômodos por domícilio", 7)
+median_income = st.slider("Renda média (em milhares de US$)", 5.0, 100.0, 45.0, 5.0)
 
-bedrooms_per_room = st.number_input("Quartos por cômodo", 0.2)
+ocean_proximity = gdf_geo.query('name == @selecionar_condado')['ocean_proximity'].values
 
-population_per_household = st.number_input("Pessoas por domicílio", 2)
+
+bins_income = [0, 1.5, 3, 4.5, 6, np.inf]
+median_income_cat = np.digitize(median_income/10, bins=bins_income)
+
+rooms_per_household = gdf_geo.query('name == @selecionar_condado')['rooms_per_household'].values
+
+bedrooms_per_room = gdf_geo.query('name == @selecionar_condado')['bedrooms_per_room'].values
+
+population_per_household = gdf_geo.query('name == @selecionar_condado')['population_per_household'].values
 
 entrada_modelo = {
     "longitude" : longitude,
@@ -56,7 +63,7 @@ entrada_modelo = {
     "total_bedrooms" : total_bedrooms,
     "population" : population,
     "households" : households,
-    "median_income" : median_income,
+    "median_income" : median_income / 10,
     "ocean_proximity" : ocean_proximity,
     "median_income_cat" : median_income_cat,
     "rooms_per_household" : rooms_per_household,
