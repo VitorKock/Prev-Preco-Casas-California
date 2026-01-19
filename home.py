@@ -46,7 +46,7 @@ def carregar_dados_geo():
         )
 
     # Apply the coordinate conversion and store in a new column
-    gdf_geo["geometry"] = gdf_geo["geometry"].apply(get_polygon_coordinates)
+    gdf_geo["polygon_coords"] = gdf_geo["geometry"].apply(get_polygon_coordinates)
 
     return gdf_geo
 
@@ -130,8 +130,8 @@ with coluna2:
 
     polygon_layer = pdk.Layer(
         "PolygonLayer",
-        data=gdf_geo[["name", "geometry"]],
-        get_polygon="geometry",
+        data=gdf_geo[["name", "polygon_coords"]],
+        get_polygon="polygon_coords",
         get_fill_color=[0, 0, 255, 100], # RGB + Transparência - azul
         get_line_color=[255, 255, 255],
         get_line_width=50,
@@ -144,8 +144,8 @@ with coluna2:
 
     highlight_layer = pdk.Layer(
         "PolygonLayer",
-        data=condado_selecionado[["name", "geometry"]],
-        get_polygon="geometry",
+        data=condado_selecionado[["name", "polygon_coords"]],
+        get_polygon="polygon_coords",
         get_fill_color=[255, 0, 0, 100], # RGB + Transparência - vermelho
         get_line_color=[0, 0, 0],
         get_line_width=500,
