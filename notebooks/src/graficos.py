@@ -41,7 +41,7 @@ def plot_residuos(y_true, y_pred):
     plt.show()
 
 
-def plot_residuos_estimador(estimator, X, y, eng_formatter=False, fracao_amostra=0.25):
+def plot_residuos_estimador(estimator, X, y, eng_formatter=False, fracao_amostra=0.25, caminho_fig=None):
 
     fig, axs = plt.subplots(1, 3, figsize=(12, 6))
 
@@ -77,6 +77,9 @@ def plot_residuos_estimador(estimator, X, y, eng_formatter=False, fracao_amostra
             ax.xaxis.set_major_formatter(EngFormatter())
 
     plt.tight_layout()
+
+    if caminho_fig != None:
+        plt.savefig(caminho_fig, dpi=300, bbox_inches='tight')
 
     plt.show()
 
