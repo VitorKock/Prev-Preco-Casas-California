@@ -88,6 +88,7 @@ Basta:
 ├── requirements.txt   <- O arquivo de requisitos para reproduzir o ambiente de análise
 ├── LICENSE            <- Licença de código aberto se uma for escolhida
 ├── README.md          <- README principal para desenvolvedores que usam este projeto.
+├── home.py            <- Arquivo que roda o aplicativo do Streamlit
 |
 ├── dados              <- Arquivos de dados para o projeto.
 |
